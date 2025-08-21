@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canadian Immigration Results</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(to right, #d52b1e, #a52217);
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-symbol {
+            width: 45px;
+            height: 45px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #d52b1e;
+            font-size: 20px;
+        }
+        
+        .admin-controls {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .admin-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .admin-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .notification {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        h1 {
+            color: #d52b1e;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+        
+        h2 {
+            color: #2e8540;
+            margin: 20px 0 10px;
+            font-size: 24px;
+        }
+        
+        h3 {
+            color: #33475b;
+            margin: 15px 0 10px;
+            font-size: 20px;
+        }
+        
+        .stats-container {
+            display: flex;
+            gap: 20px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: linear-gradient(to right, #2e8540, #3aa655);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .applicants-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .applicant-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .applicant-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .applicant-image {
+            height: 180px;
+            overflow: hidden;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .applicant-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .applicant-details {
+            padding: 20px;
+        }
+        
+        .approved {
+            border-top: 5px solid #2e8540;
+        }
+        
+        .rejected {
+            border-top: 5px solid #d52b1e;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .status-approved {
+            background-color: #e6f4ea;
+            color: #2e8540;
+        }
+        
+        .status-rejected {
+            background-color: #fce8e6;
+            color: #d52b1e;
+        }
+        
+        .admin-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: none;
+        }
+        
+        .admin-actions button {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            margin-left: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s;
+        }
+        
+        .admin-actions button:hover {
+            background: white;
+        }
+        
+        .applicant-card:hover .admin-actions {
+            display: block;
+        }
+        
+        .add-applicant-form,
+        .edit-applicant-form {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            display: none;
+        }
+        
+        .form-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            flex: 1;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #2e8540;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(46, 133, 64, 0.2);
+        }
+        
+        .photo-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px dashed #ced4da;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        
+        .photo-upload:hover {
+            border-color: #2e8540;
+        }
+        
+        .photo-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-top: 15px;
+            display: none;
+            border: 3px solid #e9ecef;
+        }
+        
+        .form-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .btn-primary {
+            background-color: #2e8540;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #266b35;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .search-container {
+            margin: 20px 0;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        
+        .filter-select {
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            background-color: white;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            color: #6c757d;
+            border-top: 1px solid #dee2e6;
+            background-color: #f8f9fa;
+        }
+        
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-form {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            width: 400px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        @media (max-width: 992px) {
+            .applicants-container {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .stats-container {
+                flex-direction: column;
+            }
+            .applicants-container {
+                grid-template-columns: 1fr;
+            }
+            .search-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-symbol">C</div>
+                <h1>Government of Canada</h1>
+            </div>
+            <p>Immigration, Refugees and Citizenship</p>
+            <div class="admin-controls">
+                <button class="admin-btn" id="login-btn"><i class="fas fa-lock"></i> Admin Login</button>
+                <button class="admin-btn" id="add-btn" style="display:none;"><i class="fas fa-plus"></i> Add Applicant</button>
+                <button class="admin-btn" id="logout-btn" style="display:none;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="notification">
+            <h1>Immigration Result Notification</h1>
+            <p>This document lists the official immigration screening results for the applicants below.</p>
+
+            <h2>Congratulations to all applicants who have been APPROVED!</h2>
+            <p>Your dedication and qualifications have met the Canadian immigration standards.<br> We look forward to welcoming you and helping you start your new chapter in Canada.</p>
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <i class="fas fa-users fa-2x"></i>
+                    <div class="stat-number" id="total-count">6</div>
+                    <p>Total Processed</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-check-circle fa-2x"></i>
+                    <div class="stat-number" id="approved-count">3</div>
+                    <p>Approved Applicants</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-times-circle fa-2x"></i>
+                    <div class="stat-number" id="rejected-count">3</div>
+                    <p>Rejected Applicants</p>
+                </div>
+            </div>
+
+            <h3>Next Steps for Approved Applicants:</h3>
+            <ul>
+                <li>Submit your passport for visa stamping within <strong>10 working days</strong>.</li>
+                <li>Complete biometric enrolment at the nearest Visa Application Centre.</li>
+                <li>Pay the Right of Permanent Residence Fee (if applicable).</li>
+            </ul>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-input" id="search-input" placeholder="Search applicants by name or EP number...">
+            <select class="filter-select" id="status-filter">
+                <option value="all">All Statuses</option>
+                <option value="APPROVED">Approved</option>
+                <option value="REJECTED">Rejected</option>
+            </select>
+            <select class="filter-select" id="nationality-filter">
+                <option value="all">All Nationalities</option>
+                <option value="Ethiopia">Ethiopia</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <h2>Applicant Results</h2>
+        <div class="applicants-container" id="applicants-list">
+            <!-- Applicant cards will be generated here -->
+        </div>
+
+        <div class="add-applicant-form" id="add-applicant-form">
+            <div class="form-title">
+                <h3>Add New Applicant</h3>
+                <button class="btn-secondary" id="close-form">Close</button>
+            </div>
+
+            <form id="new-applicant-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="age">Age *</label>
+                        <input type="number" id="age" min="1" max="120" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="sex">Sex *</label>
+                        <select id="sex" required>
+                            <option value="">Select</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nationality">Nationality *</label>
+                        <input type="text" id="nationality" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ep">EP Number *</label>
+                        <input type="text" id="ep" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="acceptance">Status *</label>
+                        <select id="acceptance" required>
+                            <option value="">Select</option>
+                            <option value="APPROVED">Approved</option>
+                            <option value="REJECTED">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Additional Notes</label>
+                    <textarea id="notes" rows="3"></textarea>
+                </div>
+
+                <div class="photo-upload" id="photo-upload">
+                    <i class="fas fa-camera fa-3x" style="color: #6c757d;"></i>
+                    <p>Click to upload applicant photo</p>
+                    <p style="font-size: 12px; color: #6c757d;">Recommended: 300x300 px, JPG or PNG</p>
+                    <img id="photo-preview" class="photo-preview">
+                    <input type="file" id="photo-input" accept="image/*" style="display: none;">
+                </div>
+
+                <div class="form-buttons">
+                    <button type="reset" class="btn-secondary">Clear Form</button>
+                    <button type="submit" class="btn-primary">Add Applicant</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="edit-applicant-form" id="edit-applicant-form">
+            <div class="form-title">
+                <h3>Edit Applicant</h3>
+                <button class="btn-secondary" id="close-edit-form">Close</button>
+            </div>
+
+            <form id="edit-applicant-form-data">
+                <input type="hidden" id="edit-index">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-name">Full Name *</label>
+                        <input type="text" id="edit-name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-age">Age *</label>
+                        <input type="number" id="edit-age" min="1" max="120" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-sex">Sex *</label>
+                        <select id="edit-sex" required>
+                            <option value="">Select</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-nationality">Nationality *</label>
+                        <input type="text" id="edit-nationality" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-ep">EP Number *</label>
+                        <input type="text" id="edit-ep" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-acceptance">Status *</label>
+                        <select id="edit-acceptance" required>
+                            <option value="">Select</option>
+                            <option value="APPROVED">Approved</option>
+                            <option value="REJECTED">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-notes">Additional Notes</label>
+                    <textarea id="edit-notes" rows="3"></textarea>
+                </div>
+
+                <div class="photo-upload" id="edit-photo-upload">
+                    <i class="fas fa-camera fa-3x" style="color: #6c757d;"></i>
+                    <p>Click to upload new applicant photo</p>
+                    <p style="font-size: 12px; color: #6c757d;">Recommended: 300x300 px, JPG or PNG</p>
+                    <img id="edit-photo-preview" class="photo-preview">
+                    <input type="file" id="edit-photo-input" accept="image/*" style="display: none;">
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="btn-danger" id="delete-applicant">Delete Applicant</button>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="login-modal" id="login-modal">
+        <div class="login-form">
+            <h2>Admin Login</h2>
+            <p style="margin-bottom: 20px; color: #6c757d;">Enter your credentials to manage applicants</p>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+
+            <div class="form-buttons">
+                <button type="button" class="btn-secondary" id="close-login">Cancel</button>
+                <button type="button" class="btn-primary" id="submit-login">Login</button>
+            </div>
+
+            <p style="margin-top: 20px; font-size: 14px; color: #6c757d;">
+                Caution: This is for the Admin only !!
+            </p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Government of Canada – Immigration, Refugees and Citizenship. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Sample data with placeholder images
+        const applicants = [{
+            name: "Gebremeskel Asmamaw Bera",
+            age: 23,
+            sex: "M",
+            nationality: "Ethiopia",
+            ep: "EP8709863",
+            acceptance: "REJECTED",
+            photo: "https://placehold.co/300x300/ffcccc/ff0000?text=G",
+            notes: "Application incomplete - missing documentation"
+        }, {
+            name: "Abeba Asfaw Teka",
+            age: 31,
+            sex: "F",
+            nationality: "Ethiopia",
+            ep: "EP1985429",
+            acceptance: "REJECTED",
+            photo: "https://placehold.co/300x300/ffcccc/ff0000?text=A",
+            notes: "Does not meet education requirements"
+        }, {
+            name: "Dawit Mekonen Setena",
+            age: 21,
+            sex: "M",
+            nationality: "Ethiopia",
+            ep: "EQ1977537",
+            acceptance: "REJECTED",
+            photo: "https://placehold.co/300x300/ffcccc/ff0000?text=D",
+            notes: "Insufficient funds declaration"
+        }, {
+            name: "Ahmed Mohammed Aragew",
+            age: 30,
+            sex: "M",
+            nationality: "Ethiopia",
+            ep: "EP7043040",
+            acceptance: "APPROVED",
+            photo: "https://placehold.co/300x300/e6f4ea/2e8540?text=A",
+            notes: "Approved pending medical examination"
+        }, {
+            name: "Gete Geleto Deba",
+            age: 22,
+            sex: "F",
+            nationality: "Ethiopia",
+            ep: "EP4816730",
+            acceptance: "APPROVED",
+            photo: "https://placehold.co/300x300/e6f4ea/2e8540?text=G",
+            notes: "Fast-track approval - skilled worker program"
+        }, {
+            name: "Agegnehu Ishete Wolde",
+            age: 33,
+            sex: "M",
+            nationality: "Ethiopia",
+            ep: "EP4956973",
+            acceptance: "APPROVED",
+            photo: "https://placehold.co/300x300/e6f4ea/2e8540?text=A",
+            notes: "Full approval granted"
+        }];
+
+        // Admin authentication
+        const adminUsername = "immigration_adminBbro";
+        const adminPassword = "securePass2024!1991";
+        let isAuthenticated = false;
+
+        // DOM Elements
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const addBtn = document.getElementById('add-btn');
+        const loginModal = document.getElementById('login-modal');
+        const closeLogin = document.getElementById('close-login');
+        const submitLogin = document.getElementById('submit-login');
+        const addForm = document.getElementById('add-applicant-form');
+        const editForm = document.getElementById('edit-applicant-form');
+        const closeForm = document.getElementById('close-form');
+        const closeEditForm = document.getElementById('close-edit-form');
+        const photoUpload = document.getElementById('photo-upload');
+        const photoInput = document.getElementById('photo-input');
+        const photoPreview = document.getElementById('photo-preview');
+        const editPhotoUpload = document.getElementById('edit-photo-upload');
+        const editPhotoInput = document.getElementById('edit-photo-input');
+        const editPhotoPreview = document.getElementById('edit-photo-preview');
+        const searchInput = document.getElementById('search-input');
+        const statusFilter = document.getElementById('status-filter');
+        const nationalityFilter = document.getElementById('nationality-filter');
+        const deleteApplicantBtn = document.getElementById('delete-applicant');
+
+        // Function to render applicants
+        function renderApplicants() {
+            const container = document.getElementById('applicants-list');
+            container.innerHTML = '';
+
+            let approvedCount = 0;
+            let rejectedCount = 0;
+
+            const searchTerm = searchInput.value.toLowerCase();
+            const statusValue = statusFilter.value;
+            const nationalityValue = nationalityFilter.value;
+
+            applicants.forEach((applicant, index) => {
+                        // Apply filters
+                        if (searchTerm && !applicant.name.toLowerCase().includes(searchTerm) &&
+                            !applicant.ep.toLowerCase().includes(searchTerm)) {
+                            return;
+                        }
+
+                        if (statusValue !== 'all' && applicant.acceptance !== statusValue) {
+                            return;
+                        }
+
+                        if (nationalityValue !== 'all' && applicant.nationality !== nationalityValue) {
+                            return;
+                        }
+
+                        const card = document.createElement('div');
+                        card.className = `applicant-card ${applicant.acceptance === 'APPROVED' ? 'approved' : 'rejected'}`;
+
+                        card.innerHTML = `
+                    <div class="applicant-image">
+                        <img src="${applicant.photo}" alt="${applicant.name}">
+                    </div>
+                    <div class="applicant-details">
+                        <h3>${applicant.name}</h3>
+                        <p><strong>Age:</strong> ${applicant.age}</p>
+                        <p><strong>Sex:</strong> ${applicant.sex}</p>
+                        <p><strong>Nationality:</strong> ${applicant.nationality}</p>
+                        <p><strong>EP Number:</strong> ${applicant.ep}</p>
+                        <div class="status ${applicant.acceptance === 'APPROVED' ? 'status-approved' : 'status-rejected'}">
+                            <i class="fas ${applicant.acceptance === 'APPROVED' ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                            ${applicant.acceptance}
+                        </div>
+                        ${applicant.notes ? `<p style="margin-top: 10px; font-style: italic;">${applicant.notes}</p>` : ''}
+                    </div>
+                    ${isAuthenticated ? `
+                    <div class="admin-actions">
+                        <button onclick="editApplicant(${index})" title="Edit Applicant">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                    ` : ''}
+                `;
+                
+                container.appendChild(card);
+                
+                if (applicant.acceptance === 'APPROVED') {
+                    approvedCount++;
+                } else {
+                    rejectedCount++;
+                }
+            });
+            
+            // Update counters
+            document.getElementById('approved-count').textContent = approvedCount;
+            document.getElementById('rejected-count').textContent = rejectedCount;
+            document.getElementById('total-count').textContent = approvedCount + rejectedCount;
+        }
+
+        // Function to add a new applicant
+        function addApplicant(event) {
+            event.preventDefault();
+            
+            const newApplicant = {
+                name: document.getElementById('name').value,
+                age: parseInt(document.getElementById('age').value),
+                sex: document.getElementById('sex').value,
+                nationality: document.getElementById('nationality').value,
+                ep: document.getElementById('ep').value,
+                acceptance: document.getElementById('acceptance').value,
+                notes: document.getElementById('notes').value,
+                photo: photoPreview.style.display === 'block' ? photoPreview.src : 
+                      `https://placehold.co/300x300/${document.getElementById('acceptance').value === 'APPROVED' ? 'e6f4ea/2e8540' : 'ffcccc/ff0000'}?text=${document.getElementById('name').value.charAt(0)}`
+            };
+            
+            applicants.push(newApplicant);
+            renderApplicants();
+            
+            // Reset form and hide
+            document.getElementById('new-applicant-form').reset();
+            photoPreview.style.display = 'none';
+            addForm.style.display = 'none';
+            
+            alert('Applicant added successfully!');
+        }
+
+        // Function to edit an existing applicant
+        function editApplicant(index) {
+            const applicant = applicants[index];
+            
+            // Fill the form with applicant data
+            document.getElementById('edit-index').value = index;
+            document.getElementById('edit-name').value = applicant.name;
+            document.getElementById('edit-age').value = applicant.age;
+            document.getElementById('edit-sex').value = applicant.sex;
+            document.getElementById('edit-nationality').value = applicant.nationality;
+            document.getElementById('edit-ep').value = applicant.ep;
+            document.getElementById('edit-acceptance').value = applicant.acceptance;
+            document.getElementById('edit-notes').value = applicant.notes || '';
+            
+            // Set photo preview
+            editPhotoPreview.src = applicant.photo;
+            editPhotoPreview.style.display = 'block';
+            
+            // Show the edit form
+            editForm.style.display = 'block';
+            editForm.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Function to save edited applicant
+        function saveEditedApplicant(event) {
+            event.preventDefault();
+            
+            const index = document.getElementById('edit-index').value;
+            const editedApplicant = {
+                name: document.getElementById('edit-name').value,
+                age: parseInt(document.getElementById('edit-age').value),
+                sex: document.getElementById('edit-sex').value,
+                nationality: document.getElementById('edit-nationality').value,
+                ep: document.getElementById('edit-ep').value,
+                acceptance: document.getElementById('edit-acceptance').value,
+                notes: document.getElementById('edit-notes').value,
+                photo: editPhotoPreview.style.display === 'block' ? editPhotoPreview.src : 
+                      `https://placehold.co/300x300/${document.getElementById('edit-acceptance').value === 'APPROVED' ? 'e6f4ea/2e8540' : 'ffcccc/ff0000'}?text=${document.getElementById('edit-name').value.charAt(0)}`
+            };
+            
+            applicants[index] = editedApplicant;
+            renderApplicants();
+            
+            // Hide the edit form
+            editForm.style.display = 'none';
+            
+            alert('Applicant updated successfully!');
+        }
+
+        // Function to delete an applicant
+        function deleteApplicant() {
+            const index = document.getElementById('edit-index').value;
+            
+            if (confirm('Are you sure you want to delete this applicant? This action cannot be undone.')) {
+                applicants.splice(index, 1);
+                renderApplicants();
+                editForm.style.display = 'none';
+                alert('Applicant deleted successfully!');
+            }
+        }
+
+        // Event listeners for authentication
+        loginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'flex';
+        });
+        
+        closeLogin.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+        });
+        
+        submitLogin.addEventListener('click', () => {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === adminUsername && password === adminPassword) {
+                isAuthenticated = true;
+                loginBtn.style.display = 'none';
+                addBtn.style.display = 'block';
+                logoutBtn.style.display = 'block';
+                loginModal.style.display = 'none';
+                renderApplicants(); // Re-render to show edit buttons
+                alert('Admin access granted!');
+            } else {
+                alert('Invalid credentials. Please try again.');
+            }
+        });
+        
+        logoutBtn.addEventListener('click', () => {
+            isAuthenticated = false;
+            loginBtn.style.display = 'block';
+            addBtn.style.display = 'none';
+            logoutBtn.style.display = 'none';
+            addForm.style.display = 'none';
+            editForm.style.display = 'none';
+            renderApplicants(); // Re-render to hide edit buttons
+            alert('You have been logged out.');
+        });
+        
+        addBtn.addEventListener('click', () => {
+            if (isAuthenticated) {
+                addForm.style.display = 'block';
+                addForm.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+        
+        closeForm.addEventListener('click', () => {
+            addForm.style.display = 'none';
+        });
+        
+        closeEditForm.addEventListener('click', () => {
+            editForm.style.display = 'none';
+        });
+        
+        // Photo upload functionality
+        photoUpload.addEventListener('click', () => {
+            photoInput.click();
+        });
+        
+        photoInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    photoPreview.src = e.target.result;
+                    photoPreview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        editPhotoUpload.addEventListener('click', () => {
+            editPhotoInput.click();
+        });
+        
+        editPhotoInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    editPhotoPreview.src = e.target.result;
+                    editPhotoPreview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Search and filter functionality
+        searchInput.addEventListener('input', renderApplicants);
+        statusFilter.addEventListener('change', renderApplicants);
+        nationalityFilter.addEventListener('change', renderApplicants);
+        
+        // Event listener for form submission
+        document.getElementById('new-applicant-form').addEventListener('submit', addApplicant);
+        document.getElementById('edit-applicant-form-data').addEventListener('submit', saveEditedApplicant);
+        deleteApplicantBtn.addEventListener('click', deleteApplicant);
+
+        // Make editApplicant function available globally
+        window.editApplicant = editApplicant;
+
+        // Initial render
+        renderApplicants();
+    </script>
+</body>
+
+</html>
